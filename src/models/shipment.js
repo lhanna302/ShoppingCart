@@ -1,36 +1,60 @@
-class Shipment {
+const STUFFED_ANIMAL = "stuffedanimal";
+const CRAYON = "crayon";
+const BALLOON = "balloon";
+
+export default class Shipment {
     constructor(customer, shipment, remainingCredits){
-        this.customer = customer;
+        this.customerId = customer.id;
         this.shipment = shipment;
         this.remainingCredits = remainingCredits;
     }
 
     static createOrder(customer, item){
-        console.log('create order');
         let shipment = [];
-        shipment.push(item);
-        let quantity = Math.floor(item.price/credits);
-        let remainingCredits = 0;
+        let remainingCredits = customer.credits;
+        let quantity = Math.floor(remainingCredits/item.price);
         switch(item.sku){
-            case "stuffedanimal":
+            case STUFFED_ANIMAL:
+                shipment.push({
+                    sku: STUFFED_ANIMAL,
+                    quantity: quantity,
+                });
                 if(quantity % 5 == 0){
-                    shipment.push({ // re-examine this.
-                        sku: "stuffedAnimal",
-                        quantity: quantity + Math.floor(quantity/5),
-                    });
+                    let index = shipment.findIndex(x => x.sku == STUFFED_ANIMAL);
+                    shipment[index].quantity += Math.floor(quantity/5);
+                    if(shipment.quantity % 5 == 0) {
+                        shipment.quantity++;
+                    }
                 }
-            case "crayon":
+                remainingCredits = remainingCredits - quantity * item.price;
+                break;
+            case CRAYON:
+                let price = item.price
+                shipment.push({
+                    sku: CRAYON,
+                    quantity: quantity,
+                });
                 if(quantity % 2 == 0){
                     shipment.push({
-                        sku: "balloon",
+                        sku: BALLOON,
                         quantity: Math.floor(quantity/2),
                     });
                 }
                 if(quantity > 5 ){
-                    const price = Math.ceil(item.price * .9);
-                    quantity = Math.floor(price/credits);
+                    price = Math.ceil(item.price * .9);
+                    quantity = Math.floor(remainingCredits/price);
                 }
+                remainingCredits = remainingCredits - quantity * price;
+                break;
+            case BALLOON:
+                shipment.push({
+                    sku: BALLOON,
+                    quantity,
+                })
+                remainingCredits = remainingCredits - quantity * item.price;
+                break;
         }
+
         return new Shipment(customer, shipment, remainingCredits);
     }
 }

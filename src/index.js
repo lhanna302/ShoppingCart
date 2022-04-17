@@ -1,14 +1,14 @@
-const fs = require('fs');
-const Shipment = require('./models/shipment');
-const Customer = require('./models/customer');
-const Item = require('./models/item');
+import fs from 'fs';
+import Shipment from '../src/models/shipment.js';
+import Customer from '../src/models/customer.js';
+import Item from '../src/models/item.js';
 
-const arguments = process.argv;
-if(arguments.length < 4){
+const args = process.argv;
+if(args.length < 4){
     throw new Error("Please include the paths of both orders and prices. See the README for more information.");
 }
-const ordersFile = arguments[2];
-const pricesFile = arguments[3];
+const ordersFile = args[2];
+const pricesFile = args[3];
 
 const orders = JSON.parse(fs.readFileSync(ordersFile));
 const prices = JSON.parse(fs.readFileSync(pricesFile));
@@ -16,12 +16,11 @@ const prices = JSON.parse(fs.readFileSync(pricesFile));
 const items = Object.keys(prices).map(k => ({"sku": k, "price": prices[k]}));;
 
 const customerOrders = orders.orders;
-for(i = 0; i < customerOrders.length; i++){
+for(let i = 0; i < customerOrders.length; i++){
     const requestedItem = items.find(x => x.sku.toLowerCase() == customerOrders[i].sku.toLowerCase());
     const customer = {
         id: customerOrders[i].customerId, 
         credits: customerOrders[i].credits,
     };
-   let shipment = Shipment.createOrder(customer, requestedItem);
-   console.log(customer.id, shipment.createOrder(customer.credits, requestedItem));
+   console.log(Shipment.createOrder(customer, requestedItem));
 }

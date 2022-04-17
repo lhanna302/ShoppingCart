@@ -1,4 +1,4 @@
-These instructions assume a pwd of the project
+These instructions assume a pwd of the project.
 
 
 To run:

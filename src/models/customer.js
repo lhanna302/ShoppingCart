@@ -1,4 +1,4 @@
-class Customer{
+export default class Customer{
     constructor(id, credits){
         this.id = id;
         this.credits = credits;
