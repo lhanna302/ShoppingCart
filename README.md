@@ -11,6 +11,7 @@ Caveats:
 - I should have written tests as I wrote code (starting with the obvious, easiest case first), instead of trying to work out the trickier logic and never getting to tests.  Every item type should have its own tests, with more tests for `stuffedanimal` and `crayon`.  
 - I tried to do this in an organized, object-oriented way, and I wasn't fully successful.
 - There is no error checking for the validity and applicability of the JSON files.  This is a dangerously naive design decision.
+- I should have included a cleaner run script.
 
 Questions I wish I had saved time to ask:
 - What is the priority of work here?  Is this an MVP where I need to hit the core functionality to show to investors immediately?  Or is the priority on maintainability?  That answer would have definitely influenced my design choices.
