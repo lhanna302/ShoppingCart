@@ -1,7 +1,6 @@
 import fs from 'fs';
 import Shipment from '../src/models/shipment.js';
-import Customer from '../src/models/customer.js';
-import Item from '../src/models/item.js';
+import Customer from './models/customer.js';
 
 const args = process.argv;
 if(args.length < 4){
@@ -18,9 +17,6 @@ const items = Object.keys(prices).map(k => ({"sku": k, "price": prices[k]}));;
 const customerOrders = orders.orders;
 for(let i = 0; i < customerOrders.length; i++){
     const requestedItem = items.find(x => x.sku.toLowerCase() == customerOrders[i].sku.toLowerCase());
-    const customer = {
-        id: customerOrders[i].customerId, 
-        credits: customerOrders[i].credits,
-    };
-   console.log(Shipment.createOrder(customer, requestedItem));
+    const customer = new Customer(customerOrders[i].customerId, customerOrders[i].credits);
+    console.log(Shipment.createOrder(customer, requestedItem));
 }

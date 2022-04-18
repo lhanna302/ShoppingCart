@@ -20,16 +20,10 @@ export default class Shipment {
                     quantity: quantity,
                 });
                 if(quantity % 5 == 0){
-                    let index = shipment.findIndex(x => x.sku == STUFFED_ANIMAL);
-                    shipment[index].quantity += Math.floor(quantity/5);
-                    if(shipment.quantity % 5 == 0) {
-                        shipment.quantity++;
-                    }
+                    shipment = calculateStuffedAnimalShipment(shipment, quantity);
                 }
-                remainingCredits = remainingCredits - quantity * item.price;
                 break;
             case CRAYON:
-                let price = item.price
                 shipment.push({
                     sku: CRAYON,
                     quantity: quantity,
@@ -41,20 +35,28 @@ export default class Shipment {
                     });
                 }
                 if(quantity > 5 ){
-                    price = Math.ceil(item.price * .9);
-                    quantity = Math.floor(remainingCredits/price);
+                    item.price = Math.ceil(item.price * .9);
+                    quantity = Math.floor(remainingCredits/item.price);
                 }
-                remainingCredits = remainingCredits - quantity * price;
                 break;
             case BALLOON:
                 shipment.push({
                     sku: BALLOON,
                     quantity,
-                })
-                remainingCredits = remainingCredits - quantity * item.price;
+                });
                 break;
         }
-
+        remainingCredits = customer.updateCustomerCredits(remainingCredits, quantity * item.price)
         return new Shipment(customer, shipment, remainingCredits);
     }
 }
+
+function calculateStuffedAnimalShipment(shipment, quantity) {
+    const index = shipment.findIndex(x => x.sku == STUFFED_ANIMAL);
+    shipment[index].quantity += Math.floor(quantity / 5); //for every five, add one
+    if (shipment.quantity % 5 == 0) { // if, after handling the initial addition, we have another set of five, add another freebie
+        shipment.quantity++;
+    }
+    return shipment;
+}
+

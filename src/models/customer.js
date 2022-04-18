@@ -1,4 +1,4 @@
-export default class Customer{
+class Customer{
     constructor(id, credits){
         this.id = id;
         this.credits = credits;
@@ -8,3 +8,5 @@ export default class Customer{
         return balance - debit;
     }
 }
+
+export default Customer;
